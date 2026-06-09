@@ -60,13 +60,13 @@ Legend: `[ ]` todo · `[~]` in progress · `[x]` done · `[!]` blocked (needs hu
 - [ ] Migration: `notes` (title, body, frontmatter jsonb, tags[], is_daily, daily_date, search tsvector + GIN), RLS + tests
 - [ ] Migration: `note_links` (source, target nullable, target_title, indexes both ways), RLS + tests
 
-### 1.2 Pure domain logic (no React/IO, unit-tested)
-- [ ] Wikilink parser `[[ ]]` (+ aliases `[[a|b]]`, headings `[[a#h]]`)
-- [ ] Frontmatter parse/serialize (js-yaml + Zod), body/frontmatter split
-- [ ] Link resolution + backlinks computation
-- [ ] Graph builder (nodes/edges, local subgraph by depth)
-- [ ] Tag extraction (`#tag`)
-- [ ] Local search index (minisearch) builder/query
+### 1.2 Pure domain logic (no React/IO, unit-tested) — ✅ done
+- [x] Wikilink parser `[[ ]]` (+ aliases `[[a|b]]`, headings `[[a#h]]`, embeds, autocomplete query)
+- [x] Frontmatter parse/serialize (js-yaml + Zod), body/frontmatter split
+- [x] Link resolution + backlinks + unresolved + orphans
+- [x] Graph builder (nodes/edges, dedupe, local subgraph by depth)
+- [x] Tag extraction (`#tag`)
+- [x] Local search index (minisearch) builder/query
 
 ### 1.3 DB layer
 - [ ] `db/notesRepo`, `db/noteLinksRepo` with Zod-validated IO
