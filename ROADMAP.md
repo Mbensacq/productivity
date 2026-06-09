@@ -11,44 +11,46 @@ Legend: `[ ]` todo · `[~]` in progress · `[x]` done · `[!]` blocked (needs hu
 ### 0.1 Repo & tooling
 - [x] Map environment, define WSL execution path, record in `tasks/lessons.md`
 - [x] `tasks/lessons.md`, `tasks/todo.md`, `ROADMAP.md`
-- [ ] `.gitignore`, `.env.example`, `.npmrc`
-- [ ] `package.json` with scripts: `dev`, `build`, `preview`, `lint`, `format`, `typecheck`, `test`, `test:e2e`
-- [ ] Vite + React 18 + TS strict config (`vite.config.ts`, `tsconfig*.json`, `base` via `VITE_BASE_PATH`)
-- [ ] ESLint (flat config) + Prettier wired; `tsc --noEmit` clean
-- [ ] Vitest + RTL + jsdom + MSW test harness; one passing smoke test
-- [ ] `git init`, initial commit (human identity, conventional commits)
+- [x] `.gitignore`, `.env.example`, `.npmrc`
+- [x] `package.json` with scripts: `dev`, `build`, `preview`, `lint`, `format`, `typecheck`, `test`
+- [x] Vite + React 18 + TS strict config (`vite.config.ts`, `tsconfig*.json`, `base` via `VITE_BASE_PATH`)
+- [x] ESLint (flat config) + Prettier wired; `tsc --noEmit` clean
+- [x] Vitest + RTL + jsdom test harness; passing tests (MSW added in Phase 1 when network is mocked)
+- [x] `git init`, initial commit (human identity, conventional commits)
 
 ### 0.2 App shell
-- [ ] Zod-validated env loader (`lib/env.ts`)
-- [ ] Supabase client (`lib/supabase.ts`, PKCE flow, persisted session)
-- [ ] TanStack Query client + IndexedDB persistence (`lib/queryClient.ts`)
-- [ ] Zustand UI store (theme, sidebar)
-- [ ] Routing with `HashRouter`; route layout; lazy-loaded feature routes
-- [ ] Light/dark theme (CSS tokens, AA contrast), toggle persisted
-- [ ] App layout (sidebar + topbar + content), responsive, keyboard-accessible
-- [ ] Global error boundary + centralized error logger hook
-- [ ] i18n label structure (fr default) via a typed `t()` dictionary
+- [x] Zod-validated env loader (`lib/env.ts`) + test
+- [x] Supabase client (`lib/supabase.ts`, PKCE flow, persisted session, lazy)
+- [x] TanStack Query client + IndexedDB persistence (`lib/queryClient.ts`)
+- [x] Zustand UI store (theme, sidebar) + test
+- [x] Routing with `HashRouter` (data router); route layout; lazy-loaded feature route
+- [x] Light/dark theme (CSS tokens, AA contrast), toggle persisted
+- [x] App layout (sidebar + topbar + content), keyboard-accessible
+- [x] Global error boundary + centralized error logger + global handlers
+- [x] i18n label structure (fr default) via a typed `t()` dictionary
 
 ### 0.3 Auth (Google via Supabase)
-- [ ] Session provider + auth state hook
-- [ ] Auth guard (protected routes redirect to login)
-- [ ] Login page: `signInWithOAuth({ provider:'google', scopes…, access_type:offline, prompt:consent, redirectTo })`
-- [ ] OAuth callback handling (`exchangeCodeForSession`), capture `provider_token` / `provider_refresh_token`
-- [ ] Logout; persisted session across reloads
-- [ ] Sync status indicator scaffold (online/offline/pending/conflict)
+- [x] Session provider + auth state hook (`useSession`)
+- [x] Auth guard (protected routes redirect to login) + test
+- [x] Login page: `signInWithOAuth({ provider:'google', scopes…, access_type:offline, prompt:consent, redirectTo })` + test
+- [x] OAuth return handled via `detectSessionInUrl` (PKCE auto-exchange); session captured
+- [x] Logout; persisted session across reloads
+- [x] Sync status indicator scaffold (online/offline)
+- [!] Live Google login round-trip — needs Supabase + Google credentials (SETUP.md)
 
 ### 0.4 Backend skeleton (Supabase)
-- [ ] `supabase/` project structure (`config.toml`, `migrations/`, `functions/`, `seed.sql`)
-- [ ] Migration: `auth`-linked base helpers, `updated_at` trigger fn, `settings` table + RLS
-- [ ] RLS test scaffolding (pgTAP or SQL) provable in CI
+- [x] `supabase/` project structure (`config.toml`, `migrations/`, `seed.sql`, `tests/`)
+- [x] Migration: `updated_at` trigger fn, `settings` table + full RLS
+- [x] RLS test (pgTAP) proving cross-user isolation — runs in CI (`db-tests.yml`, needs Docker)
 
 ### 0.5 CI/CD & deploy
-- [ ] `.github/workflows/ci.yml` (install, lint, typecheck, unit/component tests)
-- [ ] `.github/workflows/deploy.yml` (build with injected `VITE_*`, `actions/deploy-pages`)
-- [ ] `.github/workflows/supabase.yml` (migrations + functions deploy, gated)
-- [ ] `SETUP.md` (Supabase + Google Cloud + GitHub Pages step-by-step) — **human-intervention checklist**
-- [ ] `README.md` (overview, architecture, dev, build, known limits)
-- [ ] Verify deployed: assets under subpath, SW scope, deep-route refresh, Google login lands on Pages URL `[!]` (needs human secrets)
+- [x] `.github/workflows/ci.yml` (install, lint, typecheck, tests, build)
+- [x] `.github/workflows/deploy.yml` (build with injected `VITE_*`, `actions/deploy-pages`)
+- [x] `.github/workflows/supabase.yml` (migrations + functions deploy, gated)
+- [x] `.github/workflows/db-tests.yml` (local stack + pgTAP RLS)
+- [x] `SETUP.md` (Supabase + Google Cloud + GitHub Pages step-by-step) — **human-intervention checklist**
+- [x] `README.md` (overview, architecture, dev, build, known limits)
+- [!] Push to GitHub, enable Pages, verify deployed (assets under subpath, deep-route refresh, Google login) — needs human secrets + repo
 
 ---
 
