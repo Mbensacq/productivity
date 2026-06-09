@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+dev-dist/
+
+# Test / coverage artifacts
+coverage/
+playwright-report/
+test-results/
+.vitest/
+
+# Environment (never commit secrets; only .env.example is tracked)
+.env
+.env.*
+!.env.example
+
+# Supabase local generated artifacts
+supabase/.branches/
+supabase/.temp/
+.supabase/
+
+# Editor / OS
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+*.log
+npm-debug.log*
