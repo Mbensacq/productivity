@@ -22,7 +22,7 @@ export interface Backlink {
   targetTitle: string;
 }
 
-function normalizeTitle(title: string): string {
+export function normalizeTitle(title: string): string {
   return title.trim().toLowerCase();
 }
 
