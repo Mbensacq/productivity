@@ -52,6 +52,11 @@ export const fr = {
   'palette.open': 'Rechercher (Ctrl/Cmd-K)',
   'palette.noResults': 'Aucun résultat.',
 
+  'graph.title': 'Graphe des notes',
+  'graph.open': 'Graphe',
+  'graph.close': 'Fermer',
+  'graph.empty': 'Aucune note à afficher.',
+
   'setup.title': 'Configuration requise',
   'setup.supabaseMissing':
     "La connexion à Supabase n'est pas configurée. Renseignez VITE_SUPABASE_URL et VITE_SUPABASE_ANON_KEY (voir SETUP.md).",

@@ -1,9 +1,11 @@
-import { useEffect, useMemo, useState } from 'react';
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { normalizeTitle } from '@/domain/links';
 import { buildDailyNoteInput, formatDailyDate } from '@/domain/daily';
 import { CommandPalette } from '@/features/command-palette/CommandPalette';
 import { t } from '@/lib/i18n';
 import { NoteEditor } from './NoteEditor';
+
+const GraphView = lazy(() => import('./GraphView'));
 import {
   useCreateNoteMutation,
   useDeleteNoteMutation,
@@ -20,6 +22,7 @@ export default function NotesHomePage() {
   const deleteNote = useDeleteNoteMutation();
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [paletteOpen, setPaletteOpen] = useState(false);
+  const [showGraph, setShowGraph] = useState(false);
 
   const notes = useMemo(() => notesQuery.data ?? [], [notesQuery.data]);
   const selected = notes.find((note) => note.id === selectedId) ?? null;
@@ -123,6 +126,21 @@ export default function NotesHomePage() {
           >
             {t('palette.open')}
           </button>
+          <button
+            type="button"
+            onClick={() => setShowGraph(true)}
+            style={{
+              flex: 1,
+              background: 'var(--color-bg-subtle)',
+              color: 'var(--color-text)',
+              border: '1px solid var(--color-border)',
+              borderRadius: '0.4rem',
+              padding: '0.4rem',
+              cursor: 'pointer',
+            }}
+          >
+            {t('graph.open')}
+          </button>
         </div>
 
         {notesQuery.isLoading && <p>{t('app.loading')}</p>}
@@ -176,6 +194,19 @@ export default function NotesHomePage() {
         onCreateNote={() => createAndSelect(t('notes.new'))}
         onOpenDaily={openDaily}
       />
+
+      {showGraph && (
+        <Suspense fallback={null}>
+          <GraphView
+            notes={notes.map((note) => ({ id: note.id, title: note.title, body: note.body }))}
+            onClose={() => setShowGraph(false)}
+            onSelectNote={(id) => {
+              setSelectedId(id);
+              setShowGraph(false);
+            }}
+          />
+        </Suspense>
+      )}
     </div>
   );
 }
