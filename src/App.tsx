@@ -16,7 +16,7 @@ export default function App() {
         persistOptions={{ persister: queryPersister }}
       >
         <SessionProvider>
-          <RouterProvider router={router} />
+          <RouterProvider router={router} future={{ v7_startTransition: true }} />
         </SessionProvider>
       </PersistQueryClientProvider>
     </ErrorBoundary>
