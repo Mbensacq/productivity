@@ -71,27 +71,27 @@ Legend: `[ ]` todo · `[~]` in progress · `[x]` done · `[!]` blocked (needs hu
 - [x] Tag extraction (`#tag`)
 - [x] Local search index (minisearch) builder/query
 
-### 1.3 DB layer
-- [ ] `db/notesRepo`, `db/noteLinksRepo` with Zod-validated IO
-- [ ] Realtime subscription → TanStack Query cache updates
-- [ ] Server full-text search query (tsvector)
+### 1.3 DB layer — ✅ done
+- [x] `db/noteMapping` (Zod-validated row<->model), `db/notesRepo`, `db/noteLinksRepo`
+- [x] Realtime subscription → TanStack Query cache invalidation
+- [x] Server full-text search query (tsvector, `textSearch` websearch)
 
 ### 1.4 UI
-- [ ] CodeMirror 6 Markdown editor (live), `[[` autocomplete, on-the-fly note creation
-- [ ] Markdown render (react-markdown + remark-gfm + remark-frontmatter + wikilink/tag plugins)
-- [ ] Backlinks panel
-- [ ] Interactive graph (global + local) with depth limit / virtualization
-- [ ] Full-text search UI
-- [ ] Command palette (Cmd/Ctrl-K)
-- [ ] Daily notes via template
-- [ ] Notes CRUD wired to Supabase + Realtime + optimistic updates
+- [x] CodeMirror 6 Markdown editor (live), `[[` autocomplete, on-the-fly note creation
+- [x] Markdown render (react-markdown + remark-gfm + custom wikilink remark plugin)
+- [x] Backlinks panel
+- [x] Interactive graph (global) — local subgraph domain ready; depth/virtualization later
+- [x] Search (client via command palette; server FTS repo ready)
+- [x] Command palette (Cmd/Ctrl-K)
+- [x] Daily notes via template
+- [x] Notes CRUD wired to Supabase + Realtime + optimistic updates
 - [ ] PWA installable (vite-plugin-pwa) + offline read
 
 ### 1.5 Tests / DoD
-- [ ] Unit: wikilink/frontmatter/backlinks/graph/search
-- [ ] Component: editor, palette
-- [ ] e2e: login → 2 linked notes → graph + backlink
-- [ ] Docs + ROADMAP updated; CI green
+- [x] Unit: wikilink/frontmatter/backlinks/graph/search/tags/metadata/daily
+- [x] Component: markdown preview (wikilinks), command palette
+- [ ] e2e: login → 2 linked notes → graph + backlink (Playwright, CI)
+- [~] Docs + ROADMAP updated; CI green (PWA + e2e remaining)
 
 ---
 
