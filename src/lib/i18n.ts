@@ -31,6 +31,21 @@ export const fr = {
   'sync.offline': 'Hors-ligne',
   'sync.conflict': 'Conflit',
 
+  'notes.new': 'Nouvelle note',
+  'notes.empty': 'Aucune note pour le moment.',
+  'notes.selectPrompt': 'Sélectionnez une note ou créez-en une.',
+  'notes.untitled': 'Sans titre',
+  'notes.titleLabel': 'Titre de la note',
+  'notes.titlePlaceholder': 'Titre…',
+  'notes.edit': 'Éditer',
+  'notes.preview': 'Aperçu',
+  'notes.delete': 'Supprimer',
+  'notes.deleteConfirm': 'Supprimer cette note ?',
+  'notes.backlinks': 'Rétroliens',
+  'notes.noBacklinks': 'Aucun rétrolien.',
+  'notes.loadError': 'Impossible de charger les notes.',
+  'notes.searchPlaceholder': 'Rechercher dans les notes…',
+
   'setup.title': 'Configuration requise',
   'setup.supabaseMissing':
     "La connexion à Supabase n'est pas configurée. Renseignez VITE_SUPABASE_URL et VITE_SUPABASE_ANON_KEY (voir SETUP.md).",
