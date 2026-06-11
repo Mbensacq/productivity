@@ -2,13 +2,13 @@
 
 This app needs three external setups that **you** must perform (they require
 accounts/consoles the build cannot access). Everything else is automated. Do
-them in this order. This repo is **`Mbensacq/productyvity-app`**. Remaining
+them in this order. This repo is **`Mbensacq/productivity`**. Remaining
 placeholder: `<PROJECT_REF>` = your Supabase project ref (known after step 1).
 
 The deployed app URL (GitHub Pages **project** site) is:
 
 ```
-https://mbensacq.github.io/productyvity-app/
+https://mbensacq.github.io/productivity/
 ```
 
 > The `*.github.io` host is lower-cased by GitHub — use `mbensacq.github.io`
@@ -39,7 +39,7 @@ https://mbensacq.github.io/productyvity-app/
 3. Note the **Callback URL** shown there — it is:
    `https://<PROJECT_REF>.supabase.co/auth/v1/callback`. You'll register it in
    Google in the next step.
-4. **Authentication → URL Configuration** → add `https://mbensacq.github.io/productyvity-app/`
+4. **Authentication → URL Configuration** → add `https://mbensacq.github.io/productivity/`
    to **Redirect URLs** (and `http://localhost:5173/` for local dev).
 
 ---
@@ -64,7 +64,7 @@ https://mbensacq.github.io/productyvity-app/
      `http://localhost:5173`.
    - **Authorized redirect URIs**: add **both**
      - `https://<PROJECT_REF>.supabase.co/auth/v1/callback` (Supabase callback)
-     - `https://mbensacq.github.io/productyvity-app/` (this app — exact subpath incl. trailing slash)
+     - `https://mbensacq.github.io/productivity/` (this app — exact subpath incl. trailing slash)
      - `http://localhost:5173/` (local dev)
 5. Copy:
    - **Client ID** → `VITE_GOOGLE_CLIENT_ID` (public) **and** paste into Supabase
@@ -100,7 +100,7 @@ show **Enabled**.
 2. Push to `main`. The `deploy` workflow builds and publishes automatically.
 
 **Verify after deploy:**
-- `https://mbensacq.github.io/productyvity-app/` loads (assets resolve under the subpath).
+- `https://mbensacq.github.io/productivity/` loads (assets resolve under the subpath).
 - A deep hash route refresh (e.g. `…/#/login`) does **not** 404.
 - Clicking **Se connecter avec Google** redirects to Google and returns to the
   app URL signed in.

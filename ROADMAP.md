@@ -49,7 +49,7 @@ Legend: `[ ]` todo · `[~]` in progress · `[x]` done · `[!]` blocked (needs hu
 - [x] `.github/workflows/db-tests.yml` (local stack + pgTAP RLS)
 - [x] `SETUP.md` (Supabase + Google Cloud + GitHub Pages step-by-step) — **human-intervention checklist**
 - [x] `README.md` (overview, architecture, dev, build, known limits)
-- [x] Push to `Mbensacq/productyvity-app`; **CI green in CI**, **RLS pgTAP green in CI**, Supabase workflow green
+- [x] Push to `Mbensacq/productivity`; **CI green in CI**, **RLS pgTAP green in CI**, Supabase workflow green
 - [!] Enable GitHub Pages (Settings → Pages → Source: GitHub Actions) — Deploy fails at `configure-pages` until then (build itself passes)
 - [!] Add GitHub secrets (`VITE_*`, `SUPABASE_*`) so the deployed app is configured + migrations push
 - [!] Verify live: deployed app under subpath, deep hash-route refresh, Google login round-trip
