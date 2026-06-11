@@ -8,6 +8,7 @@ import { RequireAuth } from '@/features/auth/RequireAuth';
 import { t } from '@/lib/i18n';
 
 const NotesHomePage = lazy(() => import('@/features/notes/NotesHomePage'));
+const TasksPage = lazy(() => import('@/features/tasks/TasksPage'));
 
 function lazyRoute(element: ReactNode) {
   return <Suspense fallback={<FullScreenMessage>{t('app.loading')}</FullScreenMessage>}>{element}</Suspense>;
@@ -26,7 +27,10 @@ export const router = createHashRouter(
           <AppLayout />
         </RequireAuth>
       ),
-      children: [{ index: true, element: lazyRoute(<NotesHomePage />) }],
+      children: [
+      { index: true, element: lazyRoute(<NotesHomePage />) },
+      { path: 'tasks', element: lazyRoute(<TasksPage />) },
+    ],
     },
     {
       path: '*',

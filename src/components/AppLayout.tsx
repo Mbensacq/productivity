@@ -11,8 +11,10 @@ interface NavItem {
   end: boolean;
 }
 
-// Notes is live in Phase 1; the rest are placeholders enabled in later phases.
-const NAV_ITEMS: readonly NavItem[] = [{ to: '/', labelKey: 'nav.notes', end: true }];
+const NAV_ITEMS: readonly NavItem[] = [
+  { to: '/', labelKey: 'nav.notes', end: true },
+  { to: '/tasks', labelKey: 'nav.tasks', end: false },
+];
 
 export function AppLayout() {
   const sidebarOpen = useUiStore((state) => state.sidebarOpen);
