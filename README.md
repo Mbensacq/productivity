@@ -1,100 +1,192 @@
-# Productivité — notes liées & productivité
+# Productivity
 
-A personal, multi-device knowledge & productivity web app combining Obsidian-style
-linked Markdown notes (wikilinks, graph, backlinks) with Notion-style structured
-views (databases: table / kanban / calendar), anti-procrastination tooling, and
-Google Calendar / Tasks sync.
+A personal knowledge-management web application for Markdown notes connected by
+bidirectional links, with an interactive graph, full-text search, and
+offline-first synchronization.
 
-Single-user per account, but built multi-user-clean: every row is isolated by
-`user_id` and protected by Postgres Row Level Security.
+[![CI](https://github.com/Mbensacq/productivity/actions/workflows/ci.yml/badge.svg)](https://github.com/Mbensacq/productivity/actions/workflows/ci.yml)
+![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)
+![React](https://img.shields.io/badge/React-18-149ECA?logo=react&logoColor=white)
+<!-- TODO: add a license badge once a LICENSE is chosen -->
 
-> Status: **Phase 0 (foundations)** in progress. See [`ROADMAP.md`](./ROADMAP.md).
+## Overview
 
-## Architecture
+A single-page web app for capturing and connecting knowledge. Notes are written
+in Markdown with YAML frontmatter and linked with `[[wikilink]]` syntax; the app
+resolves those links into backlinks and an interactive graph of the note
+network. It is built on a relational data model (PostgreSQL via Supabase) that
+also defines structured records (tasks, events, habits, goals) intended to drive
+database-style views — see the [Roadmap](#roadmap) for current status.
 
-```
-React SPA (GitHub Pages, static)  ──HTTPS──>  Supabase
-  - UI, editor, graph                          - Auth (Google OAuth, PKCE)
-  - @supabase/supabase-js (anon key)           - Postgres + RLS + Realtime + Storage
-  - TanStack Query (+ IndexedDB cache)         - Edge Functions (Deno):
-  - Zustand (UI state)                            google-token-refresh / -calendar-sync / -tasks-sync
-  - PWA / offline queue           <──Realtime──
-```
+The frontend holds no server secrets: it talks to Supabase with a public
+anonymous key, and data isolation between users is enforced by PostgreSQL Row
+Level Security.
 
-- The frontend holds **no server secret** — only the public Supabase anon key
-  and the public Google client id. Security rests entirely on **RLS**.
-- `GOOGLE_CLIENT_SECRET` and the `service_role` key live only in Edge
-  Functions / CI.
-- Postgres is the source of truth; Realtime propagates changes; the client keeps
-  an offline-first local cache.
+### Screenshots
+
+<!-- TODO: add real screenshots under docs/ and update the paths below -->
+
+![Note editor with live wikilink autocomplete](docs/editor.png)
+![Graph view of the note network](docs/graph.png)
+![Command palette (Cmd/Ctrl-K)](docs/command-palette.png)
+
+## Features
+
+- **Markdown editor** (CodeMirror 6) with `[[wikilink]]` autocompletion and
+  on-the-fly note creation.
+- **Bidirectional links**: a backlinks panel per note and an interactive,
+  force-directed graph of the whole note network.
+- **Full-text search**: server-side PostgreSQL `tsvector` queries plus a
+  client-side index, surfaced through a `Cmd`/`Ctrl-K` command palette.
+- **Daily notes, tags, and YAML frontmatter** parsing/serialization.
+- **Offline-first sync**: the query cache is persisted to IndexedDB, writes are
+  optimistic, and changes propagate across devices over Supabase Realtime.
+- **Google sign-in** (Supabase Auth, PKCE flow) with light/dark theming and
+  keyboard-accessible navigation.
 
 ## Tech stack
 
-Vite · React 18 + TypeScript (strict) · react-router-dom (HashRouter) ·
-TanStack Query (+ IndexedDB persistence) · Zustand · Zod ·
-`@supabase/supabase-js` v2 · CodeMirror 6 (editor, Phase 1) ·
-react-markdown + remark (Phase 1) · graph via react-force-graph (Phase 1) ·
-date-fns · minisearch · Vitest + React Testing Library + MSW · Playwright (e2e) ·
-ESLint + Prettier.
+| Area              | Technology                                                                 |
+| ----------------- | -------------------------------------------------------------------------- |
+| Language          | TypeScript (strict)                                                        |
+| UI                | React 18                                                                   |
+| Build tooling     | Vite 5                                                                      |
+| Routing           | React Router (`HashRouter`)                                                |
+| Server state/cache| TanStack Query + IndexedDB persistence (`idb-keyval`)                       |
+| Local UI state    | Zustand                                                                     |
+| Backend           | Supabase — PostgreSQL, Auth, Realtime, Row Level Security                   |
+| Editor            | CodeMirror 6 (`@uiw/react-codemirror`, `@codemirror/lang-markdown`)         |
+| Markdown render   | `react-markdown`, `remark-gfm`, `remark-frontmatter` (+ custom wikilink plugin) |
+| Graph             | `react-force-graph-2d`                                                      |
+| Search            | PostgreSQL full-text + MiniSearch                                          |
+| Validation        | Zod                                                                        |
+| Frontmatter/dates | `js-yaml`, `date-fns`                                                       |
+| Testing           | Vitest, React Testing Library, MSW; pgTAP for SQL/RLS                       |
+| Tooling           | ESLint (flat config), Prettier                                             |
+| CI/CD             | GitHub Actions, GitHub Pages                                               |
 
-### Decisions / deviations
+## Getting started
 
-- **HashRouter** (not BrowserRouter) — avoids GitHub Pages SPA rewrites; no
-  `404.html` fallback needed.
-- **Graph**: `react-force-graph-2d` (lighter than Cytoscape for force layouts).
-- **Calendar view**: custom component (avoids FullCalendar's GPL/commercial
-  licensing and bundle weight). Re-evaluate if requirements grow.
-- **ESLint**: non-type-checked `recommended` rules + strict `tsc --noEmit` for
-  type safety (faster lint, full type coverage via the compiler).
+### Prerequisites
 
-## Development
+- Node.js `>= 20` and npm
+- A [Supabase](https://supabase.com) project for authentication and data
+- (Optional) Docker + the Supabase CLI to run the local database and RLS tests
+
+### Installation
 
 ```bash
-cp .env.example .env.local      # fill in public Supabase + Google values
+git clone https://github.com/Mbensacq/productivity.git
+cd productivity
 npm install
+```
+
+### Configuration
+
+Copy the example environment file and fill in your values:
+
+```bash
+cp .env.example .env.local
+```
+
+| Variable                 | Required          | Description                                            |
+| ------------------------ | ----------------- | ------------------------------------------------------ |
+| `VITE_SUPABASE_URL`      | yes               | Supabase project URL                                   |
+| `VITE_SUPABASE_ANON_KEY` | yes               | Supabase anonymous (public) key                        |
+| `VITE_GOOGLE_CLIENT_ID`  | for Google sign-in| Google OAuth web client id (public)                    |
+| `VITE_BASE_PATH`         | no                | Base path for deployment (defaults to `/`)             |
+| `VITE_SENTRY_DSN`        | no                | Optional Sentry DSN (error reporting, off by default)  |
+
+All frontend variables are public and safe to ship in the bundle. Server-side
+secrets (Supabase `service_role` key, Google client secret) are never read by
+the frontend. Full external setup — Supabase, Google OAuth, and GitHub Pages — is
+documented in [`SETUP.md`](./SETUP.md).
+
+> Without Supabase credentials the app still boots and renders a
+> "configuration required" screen instead of failing.
+
+## Usage
+
+Development server (defaults to `http://localhost:5173`):
+
+```bash
 npm run dev
 ```
 
-| Script               | Purpose                                  |
-| -------------------- | ---------------------------------------- |
-| `npm run dev`        | Vite dev server                          |
-| `npm run build`      | Type-check then production build         |
-| `npm run preview`    | Preview the production build             |
-| `npm run lint`       | ESLint (zero warnings allowed)           |
-| `npm run typecheck`  | `tsc --noEmit` (app + node configs)      |
-| `npm run test`       | Vitest (unit + component)                |
-| `npm run format`     | Prettier write                           |
+Production build and local preview:
 
-Full external setup (Supabase, Google Cloud, GitHub Pages): see
-[`SETUP.md`](./SETUP.md).
-
-## Known limits
-
-- **Google refresh token**: not managed by Supabase — refreshed by a custom Edge
-  Function (Phase 3). In Google "Testing" status, refresh tokens for sensitive
-  scopes expire after 7 days → **publish the app to Production** in Google Cloud.
-- **Notifications**: best-effort only (in-app / Pomodoro). No reliable push when
-  the app is closed without a dedicated push server.
-- **Anon key is public**: safe **only** because of RLS. Any table without a
-  policy leaks — RLS is tested in CI.
-- **Bidirectional sync**: conflicts are resolved last-write-wins by `updated_at`
-  / `etag`; a `conflict` state is surfaced in the UI, never a silent overwrite.
-- **GitHub Pages is public** even from a private repo — harmless here: the repo
-  ships no data, and all user data lives in Supabase behind auth + RLS.
-
-## Project layout
-
+```bash
+npm run build
+npm run preview
 ```
-src/
-  app/         router
-  components/  shared UI (layout, error boundary, …)
-  features/    feature modules (auth, notes, …)
-  hooks/       reusable hooks
-  lib/         env, supabase client, query client, i18n, logger
-  store/       Zustand stores
-  test/        test setup & helpers
-supabase/
-  migrations/  versioned SQL
-  functions/   Edge Functions (Deno) — Phase 3
-  tests/       pgTAP RLS tests
+
+Quality checks:
+
+```bash
+npm run lint        # ESLint (zero warnings allowed)
+npm run typecheck   # tsc --noEmit (app + tooling configs)
+npm run test        # Vitest (unit + component)
 ```
+
+Local database schema and Row Level Security tests (requires Docker + Supabase CLI):
+
+```bash
+supabase start      # boot local Postgres + Auth
+supabase db reset   # apply migrations + seed
+supabase test db    # run pgTAP RLS tests
+```
+
+## Project structure
+
+```text
+.
+├── src/
+│   ├── app/            # Router (HashRouter) and route definitions
+│   ├── components/     # Shared UI (layout, error boundary, theme toggle, …)
+│   ├── domain/         # Pure, framework-agnostic logic (wikilinks, graph, search, frontmatter, …)
+│   ├── db/             # Supabase repositories + Zod row mapping
+│   ├── features/       # Feature modules (auth, notes, command-palette)
+│   ├── hooks/          # Reusable React hooks
+│   ├── lib/            # Env validation, Supabase client, query client, i18n, logging
+│   ├── store/          # Zustand stores
+│   └── test/           # Test setup and helpers
+├── supabase/
+│   ├── migrations/     # Versioned SQL schema + RLS policies
+│   ├── tests/          # pgTAP tests (per-user data isolation)
+│   └── config.toml     # Local Supabase stack configuration
+├── .github/workflows/  # CI, Pages deploy, Supabase migrations, DB tests
+├── index.html
+├── vite.config.ts
+└── package.json
+```
+
+## Roadmap
+
+The notes core and the data layer are implemented; the productivity surface is
+in progress. Detailed phase tracking lives in [`ROADMAP.md`](./ROADMAP.md).
+
+**Implemented**
+
+- Linked Markdown notes: wikilinks, backlinks, interactive graph
+- Full-text search and `Cmd`/`Ctrl-K` command palette
+- Daily notes, tags, frontmatter
+- Supabase CRUD with Realtime, optimistic updates, and an offline cache
+- Google authentication and per-user RLS
+- Relational schema for tasks, events, habits, and goals (with RLS)
+
+**Planned**
+
+- Structured database views (table / board / calendar) over the productivity schema
+- Google Calendar and Tasks synchronization
+- Spaced-repetition review of note-derived cards
+- Analytics dashboard
+- Installable PWA with an offline write queue
+- End-to-end tests
+
+## License
+
+<!-- TODO: add a LICENSE file and state the license here (e.g. MIT) -->
+
+## Author
+
+Mathis Bensacq — [https://github.com/Mbensacq](https://github.com/Mbensacq)
