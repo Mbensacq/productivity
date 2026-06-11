@@ -99,26 +99,28 @@ Legend: `[ ]` todo · `[~]` in progress · `[x]` done · `[!]` blocked (needs hu
 ### 2.1 Data & RLS — ✅ done
 - [x] Migrations: `tasks`, `events`, `habits`, `habit_logs`, `goals` (+ RLS + pgTAP, green in CI)
 
-### 2.2 Pure logic
-- [ ] Recurrence engine (jsonb rule → next occurrences)
-- [ ] Anti-procrastination rules: forced decomposition (>25min needs subtask), implementation-intention gate, defer friction, 2-minute filter
-- [ ] Estimate-vs-actual + Pomodoro time accounting
+### 2.2 Pure logic — ✅ done
+- [x] Recurrence engine (jsonb rule → next occurrences)
+- [x] Anti-procrastination rules: forced decomposition (>25min needs subtask), implementation-intention gate, defer friction, 2-minute filter
+- [x] Estimate-vs-actual + Pomodoro time accounting
 
 ### 2.3 UI
-- [ ] GTD inbox + quick capture
-- [ ] Database views: table / kanban / calendar with filter/sort on frontmatter & properties
-- [ ] Tasks (subtasks, priorities, dates, recurrence)
-- [ ] Anti-procrastination UX (decomposition, intention, defer badge, start mode + 5-min Pomodoro, procrastination journal)
-- [ ] Pomodoro timer → logs `spent_min`
+- [x] Task data layer (mapping + repo + hooks, MSW-tested)
+- [x] GTD inbox + quick capture
+- [x] Anti-procrastination UX: start guard (decomposition + intention), 2-minute and defer hints
+- [ ] Database views: table / kanban / calendar with filter/sort on properties
+- [ ] Subtasks, priorities, dates, recurrence editing UI
+- [ ] Pomodoro timer → logs `spent_min`; start mode (5-min)
 - [ ] Time-blocking (drag task → calendar `event`)
 - [ ] Habit tracker (contributions grid, streaks)
 - [ ] Hierarchical goals ("why" linked to tasks)
+- [ ] Procrastination journal
 
 ### 2.4 Tests / DoD
-- [ ] Unit: recurrence, anti-procrastination (with counter-examples), SM-2 prep
-- [ ] Component: table/kanban/calendar, anti-procrastination guards
+- [x] Unit: recurrence, anti-procrastination (with counter-examples), pomodoro
+- [ ] Component: views, anti-procrastination guards
 - [ ] e2e: create → decompose → schedule a task
-- [ ] Docs + CI green
+- [~] Docs + CI green (UI in progress)
 
 ---
 
