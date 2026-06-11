@@ -9,14 +9,13 @@ Legend: `[ ]` todo · `[~]` in progress · `[x]` done · `[!]` blocked (needs hu
 ## Phase 0 — Foundations (deployable skeleton + Google auth)
 
 ### 0.1 Repo & tooling
-- [x] Map environment, define WSL execution path, record in `tasks/lessons.md`
-- [x] `tasks/lessons.md`, `tasks/todo.md`, `ROADMAP.md`
+- [x] Repository, tooling and `ROADMAP.md` planning
 - [x] `.gitignore`, `.env.example`, `.npmrc`
 - [x] `package.json` with scripts: `dev`, `build`, `preview`, `lint`, `format`, `typecheck`, `test`
 - [x] Vite + React 18 + TS strict config (`vite.config.ts`, `tsconfig*.json`, `base` via `VITE_BASE_PATH`)
 - [x] ESLint (flat config) + Prettier wired; `tsc --noEmit` clean
 - [x] Vitest + RTL + jsdom test harness; passing tests (MSW added in Phase 1 when network is mocked)
-- [x] `git init`, initial commit (human identity, conventional commits)
+- [x] `git init`, initial commit (conventional commits)
 
 ### 0.2 App shell
 - [x] Zod-validated env loader (`lib/env.ts`) + test

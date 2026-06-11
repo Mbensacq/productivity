@@ -28,3 +28,9 @@ supabase/.temp/
 .DS_Store
 *.log
 npm-debug.log*
+
+# Local scratch / personal notes
+tasks/
+notes.local/
+scratch/
+TODO.local.md
